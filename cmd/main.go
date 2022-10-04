@@ -187,11 +187,12 @@ func buildPipeline() (*gst.Pipeline, error) {
 	rtmpsink.Set("location", "rtmp://a.rtmp.youtube.com/live2/52ah-1jja-k4mb-7716-8hhp")
 	pipeline.Add(rtmpsink)
 
+	//tee for multiple outputs
 	rtmpsinkfb, err := gst.NewElement("rtmp2sink")
 	if err != nil {
 		return nil, err
 	}
-	rtmpsinkfb.Set("location", "rtmps://live-api-s.facebook.com:443/rtmp/FB-178457141382701-0-AbwMoWZoK0hjgLPu")
+	rtmpsinkfb.Set("location", "rtmps://live-api-s.facebook.com:443/rtmp/FB-178461424715606-0-AbxY_B70hxpRGxRC")
 	pipeline.Add(rtmpsinkfb)
 
 	flvtee, err := gst.NewElement("tee")
@@ -205,6 +206,7 @@ func buildPipeline() (*gst.Pipeline, error) {
 	flvteePadOne := flvtee.GetRequestPad("src_%u")
 	flvteePadTwo := flvtee.GetRequestPad("src_%u")
 
+	//queues for stream sinks
 	streamOutputQueues, err := gst.NewElementMany("queue", "queue")
 	if err != nil {
 		return nil, err
