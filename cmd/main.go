@@ -99,6 +99,8 @@ func buildVideoElements(pipeline *gst.Pipeline) ([]*gst.Element, error) {
 }
 
 func buildPipeline() (*gst.Pipeline, error) {
+	urlOne := os.Args[1]
+	urlTwo := os.Args[2]
 	//initialize gstreamer
 	gst.Init(nil)
 
@@ -184,7 +186,7 @@ func buildPipeline() (*gst.Pipeline, error) {
 	if err != nil {
 		return nil, err
 	}
-	rtmpsink.Set("location", "rtmp://a.rtmp.youtube.com/live2/52ah-1jja-k4mb-7716-8hhp")
+	rtmpsink.Set("location", urlOne)
 	pipeline.Add(rtmpsink)
 
 	//tee for multiple outputs
@@ -192,7 +194,7 @@ func buildPipeline() (*gst.Pipeline, error) {
 	if err != nil {
 		return nil, err
 	}
-	rtmpsinkfb.Set("location", "rtmps://live-api-s.facebook.com:443/rtmp/FB-178461424715606-0-AbxY_B70hxpRGxRC")
+	rtmpsinkfb.Set("location", urlTwo)
 	pipeline.Add(rtmpsinkfb)
 
 	flvtee, err := gst.NewElement("tee")
